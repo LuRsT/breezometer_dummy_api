@@ -1,112 +1,11 @@
 use actix_web::{web, Result};
 use std::env;
+mod serializers;
 
-use serde::Serialize;
-
-#[derive(Serialize)]
-struct PollenCount {
-    pollenCountInfo: PollenCountInfo,
-}
-
-#[derive(Serialize)]
-struct PollenCountInfo {
-    date: String,
-    index_id: String,
-    index_display_name: String,
-    types: PollenTypes,
-    plants: PlantTypes,
-}
-
-#[derive(Serialize)]
-struct PollenTypes {
-    grass: PollenType,
-    tree: PollenType,
-    weed: PollenType,
-}
-
-#[derive(Serialize)]
-struct PlantTypes {
-    olive: PollenType,
-    graminales: PollenType,
-    ragweed: PollenType,
-    birch: PollenType,
-}
-
-#[derive(Serialize)]
-struct PollenType {
-    display_name: String,
-    in_season: bool,
-    data_available: bool,
-    index: PollenIndex,
-}
-
-#[derive(Serialize)]
-struct PollenIndex {
-    value: Option<u8>,
-    category: Option<String>,
-    color: Option<String>,
-}
-
-#[derive(Serialize)]
-struct AirQuality {
-    airQualityInfo: AirQualityInfo,
-}
-
-#[derive(Serialize)]
-struct AirQualityInfo {
-    baqi: Baqi,
-}
-
-#[derive(Serialize)]
-struct Baqi {
-    display_name: String,
-    aqi: u8,
-    aqi_display: String,
-    color: String,
-    category: String,
-    dominant_pollutant: String,
-}
-
-#[derive(Serialize)]
-struct CurrentConditions {
-    feels_like_temperature: ValueUnits,
-    temperature: ValueUnits,
-    datetime: String,
-    icon_code: u8,
-    is_day_time: bool,
-    weather_text: String,
-    relative_humidity: u8,
-    cloud_cover: u8,
-    wind: Wind,
-    precipitation: Precipitation,
-    wind_gust: ValueUnits,
-    pressure: ValueUnits,
-    visibility: ValueUnits,
-    dew_point: ValueUnits,
-}
-
-#[derive(Serialize)]
-struct ValueUnits {
-    value: f32,
-    units: String,
-}
-
-#[derive(Serialize)]
-struct Precipitation {
-    precipitation_probability: u8,
-    total_precipitation: ValueUnits,
-}
-
-#[derive(Serialize)]
-struct Wind {
-    speed: ValueUnits,
-    direction: i32,
-}
-
-#[derive(Serialize)]
-struct Index {
-    urls: Vec<String>,
-}
+pub use crate::serializers::{
+    AirQuality, AirQualityInfo, Baqi, CurrentConditions, Index, PlantTypes, PollenCount,
+    PollenCountInfo, PollenIndex, PollenType, PollenTypes, Precipitation, ValueUnits, Wind,
+};
 
 // https://api.breezometer.com/weather/v1/current-conditions'
 async fn weather(_info: web::Path<()>) -> Result<web::Json<CurrentConditions>> {
