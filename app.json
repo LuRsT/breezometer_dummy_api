@@ -1,0 +1,11 @@
+{
+    "name": "Breezometer Dummy API",
+    "description": "Breezometer Dummy API (for test purposes)",
+    "repository": "https://github.com/lurst/breezometer_dummy_api",
+    "success_url": "/",
+    "keywords": ["rust", "actix"],
+    "website": "https://github.com/lurst/breezometer_dummy_api",
+    "env": {
+      "BUILDPACK_URL": "https://github.com/emk/heroku-buildpack-rust.git"
+    }
+  }
