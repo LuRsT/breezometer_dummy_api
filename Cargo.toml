@@ -1,0 +1,10 @@
+[package]
+name = "breezometer_dummy_api"
+version = "0.1.0"
+authors = ["Gil Goncalves <lursty@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+actix-web = "2"
+actix-rt = "1"
+serde = "1.0.0"
