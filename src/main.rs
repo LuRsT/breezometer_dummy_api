@@ -9,7 +9,7 @@ pub use crate::serializers::{
 
 // https://api.breezometer.com/weather/v1/current-conditions'
 async fn weather(_info: web::Path<()>) -> Result<web::Json<CurrentConditions>> {
-    Ok(web::Json(CurrentConditions {
+    let data = CurrentConditions {
         datetime: "2020-02-19T11:00:00Z".to_string(),
         icon_code: 2,
         is_day_time: true,
@@ -54,12 +54,13 @@ async fn weather(_info: web::Path<()>) -> Result<web::Json<CurrentConditions>> {
             value: 6.14,
             units: "C".to_string(),
         },
-    }))
+    };
+    Ok(web::Json(data))
 }
 
 // https://api.breezometer.com/air-quality/v2/current-conditions?'
 async fn air_quality(_info: web::Path<()>) -> Result<web::Json<AirQuality>> {
-    Ok(web::Json(AirQuality {
+    let data = AirQuality {
         airQualityInfo: AirQualityInfo {
             baqi: Baqi {
                 display_name: "BreezoMeter AQI".to_string(),
@@ -70,12 +71,13 @@ async fn air_quality(_info: web::Path<()>) -> Result<web::Json<AirQuality>> {
                 dominant_pollutant: "o3".to_string(),
             },
         },
-    }))
+    };
+    Ok(web::Json(data))
 }
 
 // https://api.breezometer.com/air-quality/v2/current-conditions?'
 async fn pollen_count(_info: web::Path<()>) -> Result<web::Json<PollenCount>> {
-    Ok(web::Json(PollenCount {
+    let data = PollenCount {
         pollenCountInfo: PollenCountInfo {
             date: "2020-03-05".to_string(),
             index_id: "bpi".to_string(),
@@ -155,18 +157,20 @@ async fn pollen_count(_info: web::Path<()>) -> Result<web::Json<PollenCount>> {
                 },
             },
         },
-    }))
+    };
+    Ok(web::Json(data))
 }
 
 async fn index(_info: web::Path<()>) -> Result<web::Json<Index>> {
-    Ok(web::Json(Index {
+    let data = Index {
         urls: [
             "http://localhost:3000/air-quality/v2/current-conditions".to_string(),
             "http://localhost:3000/weather/v1/current-conditions".to_string(),
             "http://localhost:3000/pollen/v2/forecast/daily".to_string(),
         ]
         .to_vec(),
-    }))
+    };
+    Ok(web::Json(data))
 }
 
 // https://api.breezometer.com/pollen/v2/forecast/daily?'
