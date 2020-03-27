@@ -45,6 +45,12 @@ pub struct PollenIndex {
 }
 
 #[derive(Serialize)]
+pub enum AirQualityEnum {
+    AirQuality(AirQuality),
+    AirPollutants(AirPollutants),
+}
+
+#[derive(Serialize)]
 pub struct AirQuality {
     pub airQualityInfo: AirQualityInfo,
 }
@@ -103,4 +109,35 @@ pub struct Wind {
 #[derive(Serialize)]
 pub struct Index {
     pub urls: Vec<String>,
+}
+
+// Air Pollutants
+
+#[derive(Serialize)]
+pub struct AirPollutants {
+    pub airPollutantsInfo: AirPollutantsInfo,
+}
+
+#[derive(Serialize)]
+pub struct AirPollutantsInfo {
+    pub co: PollutantInfo,
+    pub no2: PollutantInfo,
+    pub o3: PollutantInfo,
+    pub pm25: PollutantInfo,
+    pub so2: PollutantInfo,
+    pub pm10: PollutantInfo,
+}
+
+#[derive(Serialize)]
+pub struct PollutantInfo {
+    pub display_name: String,
+    pub full_name: String,
+    pub concentration: ValueUnits,
+    pub sources_and_effects: PollutantSourcesAndEffects,
+}
+
+#[derive(Serialize)]
+pub struct PollutantSourcesAndEffects {
+    pub sources: String,
+    pub effects: String,
 }

@@ -1,11 +1,21 @@
 use actix_web::{web, Result};
 use std::env;
 mod serializers;
+use serde::Deserialize;
 
 pub use crate::serializers::{
-    AirQuality, AirQualityInfo, Baqi, CurrentConditions, Index, PlantTypes, PollenCount,
-    PollenCountInfo, PollenIndex, PollenType, PollenTypes, Precipitation, ValueUnits, Wind,
+    AirPollutants, AirPollutantsInfo, AirQuality, AirQualityEnum, AirQualityInfo, Baqi,
+    CurrentConditions, Index, PlantTypes, PollenCount, PollenCountInfo, PollenIndex, PollenType,
+    PollenTypes, PollutantInfo, PollutantSourcesAndEffects, Precipitation, ValueUnits, Wind,
 };
+
+#[derive(Deserialize)]
+pub struct QueryRequest {
+    lat: Option<String>,
+    lon: Option<String>,
+    key: Option<String>,
+    features: Option<String>,
+}
 
 fn build_temperature_value() -> ValueUnits {
     let data = ValueUnits {
@@ -76,21 +86,105 @@ async fn weather(_info: web::Path<()>) -> Result<web::Json<CurrentConditions>> {
     Ok(web::Json(data))
 }
 
-// https://api.breezometer.com/air-quality/v2/current-conditions?'
-async fn air_quality(_info: web::Path<()>) -> Result<web::Json<AirQuality>> {
-    let data = AirQuality {
-        airQualityInfo: AirQualityInfo {
-            baqi: Baqi {
-                display_name: "BreezoMeter AQI".to_string(),
-                aqi: 86,
-                aqi_display: "86".to_string(),
-                color: "#3DB436".to_string(),
-                category: "Excellent air quality".to_string(),
-                dominant_pollutant: "o3".to_string(),
-            },
+// https://api.breezometer.com/air-quality/v2/current-conditions'
+async fn air_quality(
+    web::Query(info): web::Query<QueryRequest>,
+) -> Result<web::Json<AirQualityEnum>> {
+    if info.features != None {
+        // Simulate: features=health_recommendations, pollutants_concentrations, sources_and_effects
+        let data = AirQualityEnum::AirPollutants( AirPollutants{
+            airPollutantsInfo: AirPollutantsInfo {
+    co: PollutantInfo {
+        display_name: "CO".to_string(),
+        full_name: "Carbon monoxide".to_string(),
+        concentration: ValueUnits {
+            value: 315.04,
+            units: "ppb".to_string(),
         },
-    };
-    Ok(web::Json(data))
+        sources_and_effects: PollutantSourcesAndEffects{
+            sources: "Typically originates from incomplete combustion of carbon fuels, such as that which occurs in car engines and power plants.".to_string(),
+            effects: "When inhaled, carbon monoxide can prevent the blood from carrying oxygen. Exposure may cause dizziness, nausea and headaches. Exposure to extreme concentrations can lead to loss of consciousness.".to_string(),
+        }
+    },
+no2: PollutantInfo{
+display_name: "NO2".to_string(),
+full_name: "Nitrogen dioxide".to_string(),
+concentration: ValueUnits{
+value: 7.67,
+units: "ppb".to_string(),
+},
+sources_and_effects: PollutantSourcesAndEffects{
+sources: "Main sources are fuel burning processes, such as those used in industry and transportation.".to_string(),
+effects: "Exposure may cause increased bronchial reactivity in patients with asthma, lung function decline in patients with COPD, and increased risk of respiratory infections, especially in young children.".to_string(),
+}
+},
+o3: PollutantInfo{
+display_name: "O3".to_string(),
+full_name: "Ozone".to_string(),
+concentration: ValueUnits{
+value: 30.8,
+units: "ppb".to_string()
+},
+sources_and_effects: PollutantSourcesAndEffects{
+sources: "Ozone is created in a chemical reaction between atmospheric oxygen, nitrogen oxides, carbon monoxide and organic compounds, in the presence of sunlight.".to_string(),
+effects: "Ozone can irritate the airways and cause coughing, a burning sensation, wheezing and shortness of breath. Additionally, ozone is one of the major components of photochemical smog.".to_string()
+}
+},
+pm10: PollutantInfo{
+display_name: "PM10".to_string(),
+full_name: "Inhalable particulate matter (<10µm)".to_string(),
+concentration: ValueUnits{
+value: 11.78,
+units: "ug/m3".to_string(),
+},
+sources_and_effects: PollutantSourcesAndEffects{
+sources: "Main sources are combustion processes (e.g. indoor heating, wildfires), mechanical processes (e.g. construction, mineral dust, agriculture) and biological particles (e.g. pollen, bacteria, mold).".to_string(),
+effects: "Inhalable particles can penetrate into the lungs. Short term exposure can cause irritation of the airways, coughing, and aggravation of heart and lung diseases, expressed as difficulty breathing, heart attacks and even premature death.".to_string(),
+}
+},
+pm25: PollutantInfo{
+display_name: "PM2.5".to_string(),
+full_name: "Fine particulate matter (<2.5µm)".to_string(),
+concentration: ValueUnits{
+value: 6.75,
+units: "ug/m3".to_string(),
+},
+sources_and_effects: PollutantSourcesAndEffects{
+sources: "Main sources are combustion processes (e.g. power plants, indoor heating, car exhausts, wildfires), mechanical processes (e.g. construction, mineral dust) and biological particles (e.g. bacteria, viruses).".to_string(),
+effects: "Fine particles can penetrate into the lungs and bloodstream. Short term exposure can cause irritation of the airways, coughing and aggravation of heart and lung diseases, expressed as difficulty breathing, heart attacks and even premature death.".to_string()
+}
+},
+so2: PollutantInfo{
+display_name: "SO2".to_string(),
+full_name: "Sulfur dioxide".to_string(),
+concentration: ValueUnits{
+value: 0.99,
+units: "ppb".to_string()
+},
+sources_and_effects: PollutantSourcesAndEffects{
+sources: "Main sources are burning processes of sulfur-containing fuel in industry, transportation and power plants.".to_string(),
+effects: "Exposure causes irritation of the respiratory tract, coughing and generates local inflammatory reactions. These in turn, may cause aggravation of lung diseases, even with short term exposure.".to_string(),
+}
+}
+}
+
+            });
+        Ok(web::Json(data))
+    } else {
+        let data = AirQualityEnum::AirQuality(AirQuality {
+            airQualityInfo: AirQualityInfo {
+                baqi: Baqi {
+                    display_name: "BreezoMeter AQI".to_string(),
+                    aqi: 86,
+                    aqi_display: "86".to_string(),
+                    color: "#3DB436".to_string(),
+                    category: "Excellent air quality".to_string(),
+                    dominant_pollutant: "o3".to_string(),
+                },
+            },
+        });
+        Ok(web::Json(data))
+    }
 }
 
 // https://api.breezometer.com/air-quality/v2/current-conditions?'
@@ -202,7 +296,7 @@ async fn main() -> std::io::Result<()> {
                 web::get().to(air_quality),
             )
             .route("/weather/v1/current-conditions", web::get().to(weather))
-            .route("pollen/v2/forecast/daily", web::get().to(pollen_count))
+            .route("/pollen/v2/forecast/daily", web::get().to(pollen_count))
     })
     .bind(("0.0.0.0", port))?
     .run()
