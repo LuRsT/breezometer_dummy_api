@@ -7,6 +7,36 @@ pub use crate::serializers::{
     PollenCountInfo, PollenIndex, PollenType, PollenTypes, Precipitation, ValueUnits, Wind,
 };
 
+fn build_temperature_value() -> ValueUnits {
+    let data = ValueUnits {
+        value: 2.4,
+        units: "C".to_string(),
+    };
+    return data;
+}
+
+fn build_speed_value() -> ValueUnits {
+    let data = ValueUnits {
+        value: 30.6,
+        units: "km/h".to_string(),
+    };
+    return data;
+}
+
+fn build_pollen_type(display_name: String) -> PollenType {
+    let data = PollenType {
+        display_name: display_name,
+        in_season: false,
+        data_available: false,
+        index: PollenIndex {
+            value: None,
+            category: None,
+            color: None,
+        },
+    };
+    return data;
+}
+
 // https://api.breezometer.com/weather/v1/current-conditions'
 async fn weather(_info: web::Path<()>) -> Result<web::Json<CurrentConditions>> {
     let data = CurrentConditions {
@@ -16,14 +46,8 @@ async fn weather(_info: web::Path<()>) -> Result<web::Json<CurrentConditions>> {
         weather_text: "Cloudy with percipitation".to_string(),
         relative_humidity: 40,
         cloud_cover: 23,
-        temperature: ValueUnits {
-            value: 2.4,
-            units: "C".to_string(),
-        },
-        feels_like_temperature: ValueUnits {
-            value: 2.4,
-            units: "C".to_string(),
-        },
+        temperature: build_temperature_value(),
+        feels_like_temperature: build_temperature_value(),
         precipitation: Precipitation {
             precipitation_probability: 26,
             total_precipitation: ValueUnits {
@@ -32,16 +56,10 @@ async fn weather(_info: web::Path<()>) -> Result<web::Json<CurrentConditions>> {
             },
         },
         wind: Wind {
-            speed: ValueUnits {
-                value: 18.756,
-                units: "km/h".to_string(),
-            },
+            speed: build_speed_value(),
             direction: 249,
         },
-        wind_gust: ValueUnits {
-            value: 30.6,
-            units: "km/h".to_string(),
-        },
+        wind_gust: build_speed_value(),
         pressure: ValueUnits {
             value: 1012.68,
             units: "mb".to_string(),
@@ -83,16 +101,7 @@ async fn pollen_count(_info: web::Path<()>) -> Result<web::Json<PollenCount>> {
             index_id: "bpi".to_string(),
             index_display_name: "BreezoMeter Pollen Index".to_string(),
             types: PollenTypes {
-                grass: PollenType {
-                    display_name: "Grass".to_string(),
-                    in_season: false,
-                    data_available: false,
-                    index: PollenIndex {
-                        value: None,
-                        category: None,
-                        color: None,
-                    },
-                },
+                grass: build_pollen_type("Grass".to_string()),
                 tree: PollenType {
                     display_name: "Tree".to_string(),
                     in_season: true,
