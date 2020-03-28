@@ -48,7 +48,6 @@ fn build_pollen_type(display_name: String) -> PollenType {
     return data;
 }
 
-// https://api.breezometer.com/weather/v1/current-conditions'
 async fn weather(_info: web::Path<()>) -> Result<web::Json<CurrentConditions>> {
     let data = CurrentConditions {
         datetime: "2020-02-19T11:00:00Z".to_string(),
@@ -95,81 +94,81 @@ async fn air_quality(
         // Simulate: features=health_recommendations, pollutants_concentrations, sources_and_effects
         let data = AirQualityEnum::AirPollutants( AirPollutants{
             airPollutantsInfo: AirPollutantsInfo {
-    co: PollutantInfo {
-        display_name: "CO".to_string(),
-        full_name: "Carbon monoxide".to_string(),
-        concentration: ValueUnits {
-            value: 315.04,
-            units: "ppb".to_string(),
-        },
-        sources_and_effects: PollutantSourcesAndEffects{
-            sources: "Typically originates from incomplete combustion of carbon fuels, such as that which occurs in car engines and power plants.".to_string(),
-            effects: "When inhaled, carbon monoxide can prevent the blood from carrying oxygen. Exposure may cause dizziness, nausea and headaches. Exposure to extreme concentrations can lead to loss of consciousness.".to_string(),
-        }
-    },
-no2: PollutantInfo{
-display_name: "NO2".to_string(),
-full_name: "Nitrogen dioxide".to_string(),
-concentration: ValueUnits{
-value: 7.67,
-units: "ppb".to_string(),
-},
-sources_and_effects: PollutantSourcesAndEffects{
-sources: "Main sources are fuel burning processes, such as those used in industry and transportation.".to_string(),
-effects: "Exposure may cause increased bronchial reactivity in patients with asthma, lung function decline in patients with COPD, and increased risk of respiratory infections, especially in young children.".to_string(),
-}
-},
-o3: PollutantInfo{
-display_name: "O3".to_string(),
-full_name: "Ozone".to_string(),
-concentration: ValueUnits{
-value: 30.8,
-units: "ppb".to_string()
-},
-sources_and_effects: PollutantSourcesAndEffects{
-sources: "Ozone is created in a chemical reaction between atmospheric oxygen, nitrogen oxides, carbon monoxide and organic compounds, in the presence of sunlight.".to_string(),
-effects: "Ozone can irritate the airways and cause coughing, a burning sensation, wheezing and shortness of breath. Additionally, ozone is one of the major components of photochemical smog.".to_string()
-}
-},
-pm10: PollutantInfo{
-display_name: "PM10".to_string(),
-full_name: "Inhalable particulate matter (<10µm)".to_string(),
-concentration: ValueUnits{
-value: 11.78,
-units: "ug/m3".to_string(),
-},
-sources_and_effects: PollutantSourcesAndEffects{
-sources: "Main sources are combustion processes (e.g. indoor heating, wildfires), mechanical processes (e.g. construction, mineral dust, agriculture) and biological particles (e.g. pollen, bacteria, mold).".to_string(),
-effects: "Inhalable particles can penetrate into the lungs. Short term exposure can cause irritation of the airways, coughing, and aggravation of heart and lung diseases, expressed as difficulty breathing, heart attacks and even premature death.".to_string(),
-}
-},
-pm25: PollutantInfo{
-display_name: "PM2.5".to_string(),
-full_name: "Fine particulate matter (<2.5µm)".to_string(),
-concentration: ValueUnits{
-value: 6.75,
-units: "ug/m3".to_string(),
-},
-sources_and_effects: PollutantSourcesAndEffects{
-sources: "Main sources are combustion processes (e.g. power plants, indoor heating, car exhausts, wildfires), mechanical processes (e.g. construction, mineral dust) and biological particles (e.g. bacteria, viruses).".to_string(),
-effects: "Fine particles can penetrate into the lungs and bloodstream. Short term exposure can cause irritation of the airways, coughing and aggravation of heart and lung diseases, expressed as difficulty breathing, heart attacks and even premature death.".to_string()
-}
-},
-so2: PollutantInfo{
-display_name: "SO2".to_string(),
-full_name: "Sulfur dioxide".to_string(),
-concentration: ValueUnits{
-value: 0.99,
-units: "ppb".to_string()
-},
-sources_and_effects: PollutantSourcesAndEffects{
-sources: "Main sources are burning processes of sulfur-containing fuel in industry, transportation and power plants.".to_string(),
-effects: "Exposure causes irritation of the respiratory tract, coughing and generates local inflammatory reactions. These in turn, may cause aggravation of lung diseases, even with short term exposure.".to_string(),
-}
-}
-}
+                co: PollutantInfo {
+                    display_name: "CO".to_string(),
+                    full_name: "Carbon monoxide".to_string(),
+                    concentration: ValueUnits {
+                        value: 315.04,
+                        units: "ppb".to_string(),
+                    },
+                    sources_and_effects: PollutantSourcesAndEffects{
+                        sources: "Typically originates from incomplete combustion of carbon fuels, such as that which occurs in car engines and power plants.".to_string(),
+                        effects: "When inhaled, carbon monoxide can prevent the blood from carrying oxygen. Exposure may cause dizziness, nausea and headaches. Exposure to extreme concentrations can lead to loss of consciousness.".to_string(),
+                    }
+                },
+                no2: PollutantInfo{
+                    display_name: "NO2".to_string(),
+                    full_name: "Nitrogen dioxide".to_string(),
+                    concentration: ValueUnits{
+                        value: 7.67,
+                        units: "ppb".to_string(),
+                    },
+                    sources_and_effects: PollutantSourcesAndEffects{
+                        sources: "Main sources are fuel burning processes, such as those used in industry and transportation.".to_string(),
+                        effects: "Exposure may cause increased bronchial reactivity in patients with asthma, lung function decline in patients with COPD, and increased risk of respiratory infections, especially in young children.".to_string(),
+                    }
+                },
+                o3: PollutantInfo{
+                    display_name: "O3".to_string(),
+                    full_name: "Ozone".to_string(),
+                    concentration: ValueUnits{
+                        value: 30.8,
+                        units: "ppb".to_string()
+                    },
+                    sources_and_effects: PollutantSourcesAndEffects{
+                        sources: "Ozone is created in a chemical reaction between atmospheric oxygen, nitrogen oxides, carbon monoxide and organic compounds, in the presence of sunlight.".to_string(),
+                        effects: "Ozone can irritate the airways and cause coughing, a burning sensation, wheezing and shortness of breath. Additionally, ozone is one of the major components of photochemical smog.".to_string()
+                    }
+                },
+                pm10: PollutantInfo{
+                    display_name: "PM10".to_string(),
+                    full_name: "Inhalable particulate matter (<10µm)".to_string(),
+                    concentration: ValueUnits{
+                        value: 11.78,
+                        units: "ug/m3".to_string(),
+                    },
+                    sources_and_effects: PollutantSourcesAndEffects{
+                        sources: "Main sources are combustion processes (e.g. indoor heating, wildfires), mechanical processes (e.g. construction, mineral dust, agriculture) and biological particles (e.g. pollen, bacteria, mold).".to_string(),
+                        effects: "Inhalable particles can penetrate into the lungs. Short term exposure can cause irritation of the airways, coughing, and aggravation of heart and lung diseases, expressed as difficulty breathing, heart attacks and even premature death.".to_string(),
+                    }
+                },
+                pm25: PollutantInfo{
+                    display_name: "PM2.5".to_string(),
+                    full_name: "Fine particulate matter (<2.5µm)".to_string(),
+                    concentration: ValueUnits{
+                        value: 6.75,
+                        units: "ug/m3".to_string(),
+                    },
+                    sources_and_effects: PollutantSourcesAndEffects{
+                        sources: "Main sources are combustion processes (e.g. power plants, indoor heating, car exhausts, wildfires), mechanical processes (e.g. construction, mineral dust) and biological particles (e.g. bacteria, viruses).".to_string(),
+                        effects: "Fine particles can penetrate into the lungs and bloodstream. Short term exposure can cause irritation of the airways, coughing and aggravation of heart and lung diseases, expressed as difficulty breathing, heart attacks and even premature death.".to_string()
+                    }
+                },
+                so2: PollutantInfo{
+                    display_name: "SO2".to_string(),
+                    full_name: "Sulfur dioxide".to_string(),
+                    concentration: ValueUnits{
+                        value: 0.99,
+                        units: "ppb".to_string()
+                    },
+                    sources_and_effects: PollutantSourcesAndEffects{
+                        sources: "Main sources are burning processes of sulfur-containing fuel in industry, transportation and power plants.".to_string(),
+                        effects: "Exposure causes irritation of the respiratory tract, coughing and generates local inflammatory reactions. These in turn, may cause aggravation of lung diseases, even with short term exposure.".to_string(),
+                    }
+                }
+            }
 
-            });
+        });
         Ok(web::Json(data))
     } else {
         let data = AirQualityEnum::AirQuality(AirQuality {
