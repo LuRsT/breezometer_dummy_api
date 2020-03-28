@@ -1,3 +1,4 @@
+use actix_cors::Cors;
 use actix_web::{web, Result};
 use std::env;
 mod serializers;
@@ -290,13 +291,14 @@ async fn main() -> std::io::Result<()> {
 
     HttpServer::new(|| {
         App::new()
-            .route("/", web::get().to(index))
-            .route(
-                "/air-quality/v2/current-conditions",
-                web::get().to(air_quality),
+            .wrap(Cors::new().supports_credentials().finish())
+            .service(web::resource("/").route(web::get().to(index)))
+            .service(
+                web::resource("/air-quality/v2/current-conditions")
+                    .route(web::get().to(air_quality)),
             )
-            .route("/weather/v1/current-conditions", web::get().to(weather))
-            .route("/pollen/v2/forecast/daily", web::get().to(pollen_count))
+            .service(web::resource("/weather/v1/current-conditions").route(web::get().to(weather)))
+            .service(web::resource("/pollen/v2/forecast/daily").route(web::get().to(pollen_count)))
     })
     .bind(("0.0.0.0", port))?
     .run()
