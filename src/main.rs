@@ -5,9 +5,9 @@ mod serializers;
 use serde::Deserialize;
 
 pub use crate::serializers::{
-    AirPollutants, AirPollutantsInfo, AirQuality, AirQualityEnum, AirQualityInfo, Baqi,
-    CurrentConditions, Index, PlantTypes, PollenCount, PollenCountInfo, PollenIndex, PollenType,
-    PollenTypes, PollutantInfo, PollutantSourcesAndEffects, Precipitation, ValueUnits, Wind,
+    AirPollutantsInfo, AirQualityEnum, AirQualityInfo, Baqi, CurrentConditions, Index, PlantTypes,
+    PollenCount, PollenCountInfo, PollenIndex, PollenType, PollenTypes, PollutantInfo,
+    PollutantSourcesAndEffects, Precipitation, ValueUnits, Wind,
 };
 
 #[derive(Deserialize)]
@@ -92,8 +92,8 @@ async fn air_quality(
 ) -> Result<web::Json<AirQualityEnum>> {
     if info.features != None {
         // Simulate: features=health_recommendations, pollutants_concentrations, sources_and_effects
-        let data = AirQualityEnum::AirPollutants( AirPollutants{
-            airPollutantsInfo: AirPollutantsInfo {
+        println!("Got features");
+        let data = AirQualityEnum::airPollutants( AirPollutantsInfo{
                 co: PollutantInfo {
                     display_name: "CO".to_string(),
                     full_name: "Carbon monoxide".to_string(),
@@ -166,21 +166,17 @@ async fn air_quality(
                         effects: "Exposure causes irritation of the respiratory tract, coughing and generates local inflammatory reactions. These in turn, may cause aggravation of lung diseases, even with short term exposure.".to_string(),
                     }
                 }
-            }
-
         });
         Ok(web::Json(data))
     } else {
-        let data = AirQualityEnum::AirQuality(AirQuality {
-            airQualityInfo: AirQualityInfo {
-                baqi: Baqi {
-                    display_name: "BreezoMeter AQI".to_string(),
-                    aqi: 86,
-                    aqi_display: "86".to_string(),
-                    color: "#3DB436".to_string(),
-                    category: "Excellent air quality".to_string(),
-                    dominant_pollutant: "o3".to_string(),
-                },
+        let data = AirQualityEnum::airQuality(AirQualityInfo {
+            baqi: Baqi {
+                display_name: "BreezoMeter AQI".to_string(),
+                aqi: 86,
+                aqi_display: "86".to_string(),
+                color: "#3DB436".to_string(),
+                category: "Excellent air quality".to_string(),
+                dominant_pollutant: "o3".to_string(),
             },
         });
         Ok(web::Json(data))

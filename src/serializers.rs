@@ -46,13 +46,8 @@ pub struct PollenIndex {
 
 #[derive(Serialize)]
 pub enum AirQualityEnum {
-    AirQuality(AirQuality),
-    AirPollutants(AirPollutants),
-}
-
-#[derive(Serialize)]
-pub struct AirQuality {
-    pub airQualityInfo: AirQualityInfo,
+    airQuality(AirQualityInfo),
+    airPollutants(AirPollutantsInfo),
 }
 
 #[derive(Serialize)]
@@ -112,11 +107,6 @@ pub struct Index {
 }
 
 // Air Pollutants
-
-#[derive(Serialize)]
-pub struct AirPollutants {
-    pub airPollutantsInfo: AirPollutantsInfo,
-}
 
 #[derive(Serialize)]
 pub struct AirPollutantsInfo {
