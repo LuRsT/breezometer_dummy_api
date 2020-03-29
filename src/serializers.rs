@@ -66,7 +66,12 @@ pub struct Baqi {
 }
 
 #[derive(Serialize)]
-pub struct CurrentConditions {
+pub struct WeatherInfo {
+    pub weatherInfo: Weather,
+}
+
+#[derive(Serialize)]
+pub struct Weather {
     pub feels_like_temperature: ValueUnits,
     pub temperature: ValueUnits,
     pub datetime: String,

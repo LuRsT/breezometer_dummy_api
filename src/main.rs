@@ -5,9 +5,9 @@ mod serializers;
 use serde::Deserialize;
 
 pub use crate::serializers::{
-    AirPollutantsInfo, AirQualityEnum, AirQualityInfo, Baqi, CurrentConditions, Index, PlantTypes,
-    PollenCount, PollenCountInfo, PollenIndex, PollenType, PollenTypes, PollutantInfo,
-    PollutantSourcesAndEffects, Precipitation, ValueUnits, Wind,
+    AirPollutantsInfo, AirQualityEnum, AirQualityInfo, Baqi, Index, PlantTypes, PollenCount,
+    PollenCountInfo, PollenIndex, PollenType, PollenTypes, PollutantInfo,
+    PollutantSourcesAndEffects, Precipitation, ValueUnits, Weather, WeatherInfo, Wind,
 };
 
 #[derive(Deserialize)]
@@ -48,39 +48,41 @@ fn build_pollen_type(display_name: String) -> PollenType {
     return data;
 }
 
-async fn weather(_info: web::Path<()>) -> Result<web::Json<CurrentConditions>> {
-    let data = CurrentConditions {
-        datetime: "2020-02-19T11:00:00Z".to_string(),
-        icon_code: 2,
-        is_day_time: true,
-        weather_text: "Cloudy with percipitation".to_string(),
-        relative_humidity: 40,
-        cloud_cover: 23,
-        temperature: build_temperature_value(),
-        feels_like_temperature: build_temperature_value(),
-        precipitation: Precipitation {
-            precipitation_probability: 26,
-            total_precipitation: ValueUnits {
-                value: 15.4,
-                units: "mm".to_string(),
+async fn weather(_info: web::Path<()>) -> Result<web::Json<WeatherInfo>> {
+    let data = WeatherInfo {
+        weatherInfo: Weather {
+            datetime: "2020-02-19T11:00:00Z".to_string(),
+            icon_code: 2,
+            is_day_time: true,
+            weather_text: "Cloudy with percipitation".to_string(),
+            relative_humidity: 40,
+            cloud_cover: 23,
+            temperature: build_temperature_value(),
+            feels_like_temperature: build_temperature_value(),
+            precipitation: Precipitation {
+                precipitation_probability: 26,
+                total_precipitation: ValueUnits {
+                    value: 15.4,
+                    units: "mm".to_string(),
+                },
             },
-        },
-        wind: Wind {
-            speed: build_speed_value(),
-            direction: 249,
-        },
-        wind_gust: build_speed_value(),
-        pressure: ValueUnits {
-            value: 1012.68,
-            units: "mb".to_string(),
-        },
-        visibility: ValueUnits {
-            value: 9.0,
-            units: "km".to_string(),
-        },
-        dew_point: ValueUnits {
-            value: 6.14,
-            units: "C".to_string(),
+            wind: Wind {
+                speed: build_speed_value(),
+                direction: 249,
+            },
+            wind_gust: build_speed_value(),
+            pressure: ValueUnits {
+                value: 1012.68,
+                units: "mb".to_string(),
+            },
+            visibility: ValueUnits {
+                value: 9.0,
+                units: "km".to_string(),
+            },
+            dew_point: ValueUnits {
+                value: 6.14,
+                units: "C".to_string(),
+            },
         },
     };
     Ok(web::Json(data))
